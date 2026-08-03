@@ -1,127 +1,104 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { OutlineButton } from "@/components/OutlineButton";
 import { motion } from "framer-motion";
-import { projects } from "@/data/site";
-import { SplitHeading } from "./SplitHeading";
+import { SectionEyebrow } from "@/components/SectionEyebrow";
+import { projects, type Project } from "@/data/site";
 
 const featured = projects.filter((p) => p.featured);
 
+const categoryLabel: Record<Project["categories"][number], string> = {
+  backend: "Backend",
+  frontend: "Frontend",
+  fullstack: "Fullstack",
+};
+
 export function Projects() {
   return (
-    <section id="projects" className="border-t border-border py-24 md:py-32">
-      <div className="mx-auto max-w-7xl px-6">
-        <SplitHeading
-          eyebrow="Meu trabalho"
-          title="Projetos "
-          accent="selecionados"
-          subtitle="Uma curadoria dos projetos que melhor mostram minha expertise em desenvolvimento e design de interface."
-        />
+    <section id="projects" className="mx-auto max-w-7xl px-6 pt-16 pb-8 md:px-8 md:pb-12">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+      >
+        <SectionEyebrow>My work</SectionEyebrow>
+      </motion.div>
 
-        <div className="grid gap-6 md:grid-cols-2">
-          {featured.map((project, i) => (
-            <motion.article
-              key={project.id}
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-5%" }}
-              transition={{ delay: i * 0.08 }}
-              className="group relative overflow-hidden rounded-3xl border border-border bg-bg-800/40"
-            >
-              <div className="relative aspect-[16/10] overflow-hidden">
+      <motion.h2
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.05 }}
+        className="font-clash text-4xl font-medium leading-none tracking-tight text-primary md:text-5xl lg:text-6xl"
+      >
+        Selected projects
+      </motion.h2>
+
+      <motion.p
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.1 }}
+        className="mt-4 max-w-xl text-pretty font-satoshi text-secondary"
+      >
+        A curated selection of projects that best showcase my expertise and the results achieved.
+      </motion.p>
+
+      <div className="grid grid-cols-1 gap-y-10 py-10 sm:grid-cols-2 sm:gap-x-16 sm:gap-y-0">
+        {featured.map((project, i) => (
+          <motion.div
+            key={project.id}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-5%" }}
+            transition={{ delay: i * 0.06 }}
+            className="group h-fit w-full sm:even:mt-14"
+          >
+            <Link href={`/projects/${project.id}`} className="block h-fit w-full">
+              <div className="aspect-3/2 w-full overflow-hidden rounded-3xl bg-bg-800">
                 <Image
                   src={project.image}
                   alt={project.title}
-                  fill
-                  className="object-cover transition duration-700 group-hover:scale-105"
+                  width={600}
+                  height={400}
+                  className="aspect-3/2 w-full object-cover transition duration-300 group-hover:scale-[1.015]"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-bg-900 via-bg-900/20 to-transparent" />
               </div>
 
-              <div className="p-6 md:p-8">
-                <div className="mb-3 flex flex-wrap gap-2">
-                  {project.categories.map((cat) => (
-                    <span
-                      key={cat}
-                      className="rounded-full border border-border px-3 py-1 font-satoshi text-xs capitalize text-secondary"
-                    >
-                      {cat === "development" ? "Desenvolvimento" : "Design"}
-                    </span>
-                  ))}
-                  <span className="rounded-full border border-border px-3 py-1 font-satoshi text-xs text-secondary">
-                    {project.year}
-                  </span>
-                </div>
-
-                <h3 className="font-clash text-2xl font-semibold tracking-tight text-primary">{project.title}</h3>
-                <p className="mt-3 font-satoshi text-sm leading-relaxed text-secondary md:text-base">
-                  {project.description}
-                </p>
-
-                <div className="mt-5 flex flex-wrap gap-3">
-                  {project.links.github && (
-                    <a
-                      href={project.links.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-satoshi text-sm text-highlight hover:opacity-80"
-                    >
-                      GitHub
-                    </a>
-                  )}
-                  {project.links.live && (
-                    <a
-                      href={project.links.live}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-satoshi text-sm text-highlight hover:opacity-80"
-                    >
-                      Demo
-                    </a>
-                  )}
-                  {project.links.npm && (
-                    <a
-                      href={project.links.npm}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-satoshi text-sm text-highlight hover:opacity-80"
-                    >
-                      npm
-                    </a>
-                  )}
-                  {project.links.article && (
-                    <a
-                      href={project.links.article}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-satoshi text-sm text-highlight hover:opacity-80"
-                    >
-                      Artigo
-                    </a>
-                  )}
+              <div className="mt-2 space-y-1.5">
+                <h3 className="font-clash text-xl font-medium text-primary">{project.title}</h3>
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex flex-wrap gap-2">
+                    {project.categories.map((cat) => (
+                      <span
+                        key={cat}
+                        className="inline-flex rounded-full bg-bg-800 px-3 py-1 font-satoshi text-sm text-primary"
+                      >
+                        {categoryLabel[cat]}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="shrink-0 font-satoshi text-sm text-secondary">{project.year}</p>
                 </div>
               </div>
-            </motion.article>
-          ))}
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="mt-12 text-center"
-        >
-          <a
-            href="https://github.com/giovaniohira"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 font-satoshi text-sm text-primary transition hover:border-highlight/40 hover:bg-highlight/10"
-          >
-            Ver todos no GitHub
-          </a>
-        </motion.div>
+            </Link>
+          </motion.div>
+        ))}
       </div>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        className="mt-4 text-center"
+      >
+        <OutlineButton href="/projects" className="mx-auto block">
+          View all projects
+        </OutlineButton>
+      </motion.div>
     </section>
   );
 }

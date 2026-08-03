@@ -1,11 +1,16 @@
 export const site = {
   name: "Giovani Ohira",
   initials: "GO",
-  role: "Engenheiro de Software | UI/UX",
-  tagline: "Criando experiências digitais com propósito, performance e acessibilidade.",
+  role: "Software Engineer | UI/UX",
+  tagline: "Building digital experiences with purpose, performance, and accessibility.",
+  heroHeadline: {
+    before: "Building ",
+    accent: "digital experiences with purpose",
+    after: ", performance, and accessibility.",
+  } as const,
   description:
-    "Desenvolvo produtos pixel-perfect, acessíveis e escaláveis — do backend à interface — com foco em qualidade, segurança e impacto real no negócio.",
-  location: "Curitiba, Brasil",
+    "I build end-to-end digital products, from API to interface, combining backend, frontend, and automated testing with care for user experience.",
+  location: "Curitiba, Brazil",
   email: "giovaniohira@gmail.com",
   available: true,
   social: {
@@ -16,41 +21,121 @@ export const site = {
 } as const;
 
 export const marqueeItems = [
-  "Desenvolvimento",
+  "Development",
   "UI/UX",
   "Mobile",
-  "Testes",
+  "Testing",
   "Backend",
   "Frontend",
   "DevOps",
-  "Automação",
+  "Automation",
 ] as const;
 
 export const aboutText =
-  "Sou Giovani Ohira, engenheiro de software com mais de dois anos de experiência em desenvolvimento full stack e testes automatizados. Trabalho com marcas e equipes para entregar produtos digitais de alta qualidade — seguros, rápidos e fáceis de manter. Hoje atuo como Engenheiro Pleno na Nexus Labz, liderando decisões de arquitetura, infraestrutura e mentoria técnica.";
+  "I'm Giovani Ohira, a mid-level full stack engineer with 2+ years of experience, focused on performant, well-architected products.";
+
+export const aboutPage = {
+  headline: {
+    before: "A ",
+    accent: "full stack engineer",
+    after: " & digital designer",
+  },
+  description:
+    "I build end-to-end digital products — from API to interface — combining solid engineering, automated testing, and UX care. I work with brands and teams that value quality, performance, and consistent delivery.",
+  resumeUrl: "/giovani-ohira-software-engineer-2026.pdf",
+} as const;
+
+export const aboutSkills = [
+  { name: "TypeScript", icon: "/skills/TypeScript.svg" },
+  { name: "JavaScript", icon: "/skills/JavaScript.svg" },
+  { name: "React", icon: "/skills/React.svg" },
+  { name: "Next.js", icon: "/skills/Next.js.svg" },
+  { name: "Node.js", icon: "/skills/Node.js.svg" },
+  { name: "Express", icon: "/skills/Express.svg" },
+  { name: "PostgreSQL", icon: "/skills/PostgreSQL.svg" },
+  { name: "Prisma", icon: "/skills/Prisma.svg" },
+  { name: "React Native", icon: "/skills/React-Native.svg" },
+  { name: "Playwright", icon: "/skills/Playwright.svg" },
+  { name: "AWS", icon: "/skills/AWS.svg" },
+  { name: "Docker", icon: "/skills/Docker.svg" },
+  { name: "Tailwind CSS", icon: "/skills/Tailwind-CSS.svg" },
+  { name: "Framer Motion", icon: "/skills/Framer-Motion.svg" },
+  { name: "Figma", icon: "/skills/Figma.svg" },
+  { name: "Git", icon: "/skills/Git.svg" },
+] as const;
 
 export type Project = {
   id: string;
   title: string;
   description: string;
+  longDescription?: string;
   image: string;
+  /** Extra shots shown in the article body (cover stays `image`). */
+  screenshots?: string[];
   tags: string[];
   year: string;
-  categories: ("development" | "design")[];
+  categories: ("backend" | "frontend" | "fullstack")[];
   links: { github?: string; live?: string; npm?: string; article?: string };
   featured?: boolean;
+  role?: string;
+  features?: string[];
+  technologies?: { name: string; description?: string; url?: string }[];
+  buildSteps?: { title: string; code?: string }[];
 };
+
+export const pageNavLinks = [
+  { href: "/", label: "Home", id: "home" },
+  { href: "/about", label: "About", id: "about" },
+  { href: "/projects", label: "Projects", id: "projects" },
+  { href: "/contact", label: "Contact", id: "contact" },
+] as const;
+
+export const sectionNavLinks = [
+  { label: "Home", sectionId: "home" },
+  { label: "About", sectionId: "about" },
+  { label: "Projects", sectionId: "projects" },
+  { label: "Contact", sectionId: "contact" },
+] as const;
+
+export const contactFaqs = [
+  {
+    question: "What is your current role?",
+    answer:
+      "I'm a mid-level full stack engineer at Nexus Labz, working on web and mobile products end-to-end — from architecture and backend to deploy and UI.",
+  },
+  {
+    question: "What kind of projects do you take on?",
+    answer:
+      "Product builds, MVPs, e-commerce, internal tools, and quality engineering. I prefer projects where I can own features from API to interface.",
+  },
+  {
+    question: "How long does a typical project take?",
+    answer:
+      "It depends on scope. A focused landing page or feature can ship in 1–2 weeks; a full product MVP usually takes 4–8 weeks with clear requirements.",
+  },
+  {
+    question: "Are you available for full-time or contract work?",
+    answer:
+      "Yes. I'm open to full-time roles and selective contract work. Reach out with the role or project details and I'll reply within 24 hours.",
+  },
+] as const;
+
+export const formspreeEndpoint = "https://formspree.io/f/mvgqqkzw";
+
+export function getProjectById(id: string) {
+  return projects.find((project) => project.id === id);
+}
 
 export const projects: Project[] = [
   {
     id: "vault",
     title: "Vault",
     description:
-      "Gerenciador de senhas e TOTP com criptografia AES-GCM no cliente. Segurança end-to-end com Next.js, Node e PostgreSQL.",
-    image: "https://i.ibb.co/ZpgScTy4/image-2025-08-27-213005278.png",
+      "Password and TOTP manager with client-side AES-GCM encryption. End-to-end security with Next.js, Node, and PostgreSQL.",
+    image: "/projects/vault-cover-v2.png",
     tags: ["Next.js", "TypeScript", "WebCrypto", "PostgreSQL"],
     year: "2025",
-    categories: ["development", "design"],
+    categories: ["fullstack"],
     links: {
       github: "https://github.com/giovaniohira/vault",
       live: "https://vault-demo.vercel.app",
@@ -58,28 +143,67 @@ export const projects: Project[] = [
         "https://medium.com/@giovaniohira/how-i-built-an-end-to-end-encrypted-credentials-manager-and-authenticator-and-what-i-learned-about-74ffb89f0d01",
     },
     featured: true,
-  },
-  {
-    id: "ohira-store",
-    title: "Ohira Store",
-    description:
-      "E-commerce completo com checkout, pagamentos via Mercado Pago, autenticação Supabase e painel administrativo.",
-    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80",
-    tags: ["Next.js", "Supabase", "Tailwind CSS", "Mercado Pago"],
-    year: "2026",
-    categories: ["development", "design"],
-    links: { github: "https://github.com/giovaniohira/ohira-store" },
-    featured: true,
+    role: "Full-stack Developer",
+    longDescription:
+      "End-to-end encrypted password and TOTP manager. Credentials never leave the browser unencrypted — AES-GCM in WebCrypto, with a clean Next.js interface and Node/PostgreSQL backend.",
+    features: [
+      "Client-side AES-GCM encryption before data reaches the server.",
+      "TOTP authenticator with QR import and copy-to-clipboard.",
+      "Organized vault with search, categories, and secure session handling.",
+      "Next.js frontend with responsive UI and dark mode.",
+      "REST API with PostgreSQL and structured auth flows.",
+    ],
+    technologies: [
+      {
+        name: "Next.js",
+        description: "App Router frontend and API routes.",
+        url: "https://nextjs.org/",
+      },
+      {
+        name: "TypeScript",
+        description: "End-to-end type safety.",
+        url: "https://www.typescriptlang.org/",
+      },
+      {
+        name: "WebCrypto API",
+        description: "Browser-native AES-GCM encryption.",
+        url: "https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API",
+      },
+      {
+        name: "Node.js",
+        description: "Backend services and auth.",
+        url: "https://nodejs.org/",
+      },
+      {
+        name: "PostgreSQL",
+        description: "Persistent encrypted credential storage.",
+        url: "https://www.postgresql.org/",
+      },
+    ],
+    buildSteps: [
+      {
+        title: "Clone the repository",
+        code: "git clone https://github.com/giovaniohira/vault && cd vault",
+      },
+      {
+        title: "Install dependencies",
+        code: "npm install",
+      },
+      {
+        title: "Run the development server",
+        code: "npm run dev",
+      },
+    ],
   },
   {
     id: "maps-wrapper",
     title: "Google Maps Routes Wrapper",
     description:
-      "Wrapper Node.js para a API de rotas do Google Maps com DX limpa, parsing consistente e publicado no npm.",
-    image: "https://i.cdn.newsbytesapp.com/images/l39020231213160207.jpeg",
+      "Node.js wrapper for the Google Maps Routes API with clean DX, consistent parsing, published on npm.",
+    image: "/projects/maps-wrapper-cover.png",
     tags: ["Node.js", "npm", "API", "Google Maps"],
     year: "2025",
-    categories: ["development"],
+    categories: ["backend"],
     links: {
       github: "https://github.com/giovaniohira/google-maps-routes-api-wrapper",
       npm: "https://www.npmjs.com/package/google-maps-routes-api-wrapper",
@@ -87,99 +211,17 @@ export const projects: Project[] = [
     featured: true,
   },
   {
-    id: "sudokuarena",
-    title: "Sudoku Arena",
+    id: "algo-client",
+    title: "Algo Client",
     description:
-      "Jogo de Sudoku online com interface minimalista, feedback visual imediato e experiência mobile-first.",
-    image: "https://images.unsplash.com/photo-1611996575749-79a61a54e633?w=800&q=80",
-    tags: ["Next.js", "React", "TypeScript", "Game UI"],
+      "Desktop LeetCode client — fast, focused, offline-friendly browsing with Monaco editor and Electron.",
+    image: "/projects/algo-client-cover-v2.png",
+    tags: ["Electron", "React", "Monaco Editor", "LeetCode"],
     year: "2026",
-    categories: ["development", "design"],
-    links: { github: "https://github.com/giovaniohira/sudokuarena" },
-    featured: true,
-  },
-  {
-    id: "event-api",
-    title: "Event Management API",
-    description:
-      "API REST para CRUD de eventos com Express, Prisma e PostgreSQL — validação, erros centralizados e arquitetura em camadas.",
-    image: "https://blog.accurate.com.br/wp-content/uploads/2023/10/apiwebservicewebstoryslide2-1920x1080-1.jpg",
-    tags: ["Node.js", "Express", "Prisma", "PostgreSQL"],
-    year: "2024",
-    categories: ["development"],
-    links: { github: "https://github.com/giovaniohira/event-management-api" },
-  },
-  {
-    id: "dsa-coach",
-    title: "DSA Coach",
-    description:
-      "App desktop Electron para preparação em entrevistas técnicas — editor Monaco, sync LeetCode e coach pessoal.",
-    image: "https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=800&q=80",
-    tags: ["Electron", "React", "SQLite", "Monaco Editor"],
-    year: "2026",
-    categories: ["development", "design"],
-    links: { github: "https://github.com/giovaniohira/dsa-coach" },
+    categories: ["fullstack"],
+    links: { github: "https://github.com/giovaniohira/algo-client" },
   },
 ];
-
-export const expertiseAreas = [
-  {
-    id: "development",
-    label: "Desenvolvimento",
-    skills: [
-      "TypeScript",
-      "JavaScript",
-      "React",
-      "Next.js",
-      "Node.js",
-      "Express",
-      "React Native",
-      "PostgreSQL",
-      "Prisma",
-      "Playwright",
-      "AWS",
-      "Docker",
-      "Git",
-      "CI/CD",
-    ],
-  },
-  {
-    id: "design",
-    label: "UI/UX Design",
-    skills: [
-      "Figma",
-      "Design Systems",
-      "Prototipagem",
-      "Wireframes",
-      "Tailwind CSS",
-      "Framer Motion",
-      "Acessibilidade",
-      "Mobile First",
-      "Microinterações",
-      "Tipografia",
-      "Hierarquia Visual",
-      "Design Tokens",
-    ],
-  },
-  {
-    id: "quality",
-    label: "Qualidade & Testes",
-    skills: [
-      "Playwright",
-      "Jest",
-      "E2E Testing",
-      "Test Automation",
-      "SDET",
-      "CI/CD",
-      "Self-healing Tests",
-      "MCP",
-      "Requirements Analysis",
-      "Smoke Tests",
-      "Regression",
-      "Quality Engineering",
-    ],
-  },
-] as const;
 
 export type Experience = {
   id: string;
@@ -188,6 +230,8 @@ export type Experience = {
   period: string;
   location: string;
   summary: string;
+  highlights?: string[];
+  logo?: string;
   url?: string;
 };
 
@@ -195,39 +239,50 @@ export const experiences: Experience[] = [
   {
     id: "nexus",
     company: "Nexus Labz",
-    role: "Engenheiro de Software Pleno",
-    period: "Fev 2026 — Atual",
-    location: "Brasil · Remoto",
+    role: "Mid-Level Software Engineer",
+    period: "Feb 2026 — Present",
+    location: "Brazil · Remote",
+    logo: "/companies/nexus.png",
     summary:
-      "Arquitetura e entrega de apps mobile e web em produção. Infraestrutura VPS, CI/CD, mentoria técnica e integração de pagamentos.",
+      "Mid-level engineer responsible for architecture and infrastructure decisions, web and mobile project delivery for clients, and mentoring junior developers.",
+    highlights: [
+      "Define architecture and infrastructure (VPS, CI/CD) for web and mobile apps in production.",
+      "Deliver end-to-end features for clients, from backend to deploy.",
+      "Mentor junior developers and support integrations such as payments and authentication.",
+    ],
     url: "https://nexuslabz.co",
   },
   {
     id: "voidr",
     company: "Voidr",
-    role: "SDET Júnior",
-    period: "Out 2025 — Fev 2026",
-    location: "Paraná · Remoto",
+    role: "Junior SDET",
+    period: "Oct 2025 — Feb 2026",
+    location: "Paraná · Remote",
+    logo: "/companies/voidr.png",
     summary:
-      "Reduzi tempo de regressão de 6h para 12min (97%). Automação E2E com Playwright, TypeScript e pipelines de CI/CD.",
+      "E2E automation for client platforms with Playwright and TypeScript, reducing regression from 6h to 12min.",
+    highlights: [
+      "Reduced regression time from 6h to 12min (~97%) with stable Playwright suites.",
+      "Modeled real user flows in E2E tests with TypeScript and MCP integration.",
+      "Implemented CI/CD pipelines with self-healing capabilities for more reliable releases.",
+    ],
     url: "https://www.voidr.co/en",
   },
   {
     id: "utfpr",
     company: "UTFPR",
-    role: "Desenvolvedor Full Stack",
-    period: "Fev 2025 — Ago 2025",
+    role: "Full Stack Developer",
+    period: "Feb 2025 — Aug 2025",
     location: "Cornélio Procópio",
+    logo: "/companies/utfpr.png",
     summary:
-      "Plataforma de workshops com 300+ usuários semanais. API REST, check-in em tempo real e certificados automáticos.",
+      "University workshop platform with 300+ weekly users, REST API, and automatic certificates.",
+    highlights: [
+      "Built workshop platform with 300+ active weekly users.",
+      "Built REST API with real-time check-in and automatic certificate issuance.",
+      "Delivered responsive interface and optimized registration flows for event use.",
+    ],
   },
 ];
 
-export const navLinks = [
-  { href: "#home", label: "Home" },
-  { href: "#about", label: "Sobre" },
-  { href: "#projects", label: "Projetos" },
-  { href: "#expertise", label: "Expertise" },
-  { href: "#experience", label: "Experiência" },
-  { href: "#contact", label: "Contato" },
-] as const;
+export const navLinks = pageNavLinks;

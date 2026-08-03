@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { SectionEyebrow } from "@/components/SectionEyebrow";
 
 type SplitHeadingProps = {
   eyebrow?: string;
@@ -22,15 +23,15 @@ export function SplitHeading({
   return (
     <div className={`mb-12 flex flex-col gap-4 ${alignClass}`}>
       {eyebrow && (
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="font-satoshi text-xs font-medium uppercase tracking-[0.25em] text-secondary"
         >
-          {eyebrow}
-        </motion.p>
+          <SectionEyebrow>{eyebrow}</SectionEyebrow>
+        </motion.div>
       )}
+
       <motion.h2
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -41,6 +42,7 @@ export function SplitHeading({
         <span>{title}</span>
         <span>{accent}</span>
       </motion.h2>
+
       {subtitle && (
         <motion.p
           initial={{ opacity: 0, y: 12 }}

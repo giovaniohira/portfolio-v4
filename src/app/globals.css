@@ -1,6 +1,23 @@
 @import "tailwindcss";
+@import "lenis/dist/lenis.css";
 
 :root {
+  --text-primary: #0a0a0a;
+  --text-secondary: #52525b;
+  --text-inverse: #f7f8fa;
+  --highlight: #30af5b;
+  --bg-600: #cbd5e1;
+  --bg-700: #e5e7eb;
+  --bg-800: #ffffff;
+  --bg-900: #f7f8fa;
+  --backdrop: #ffffffcc;
+  --background: #ffffff;
+  --foreground: #09090b;
+  --muted-foreground: #71717a;
+  --border: #e4e4e7;
+}
+
+.dark {
   --text-primary: #f6f7ff;
   --text-secondary: #c0c0cf;
   --text-inverse: #0b0b0d;
@@ -9,6 +26,7 @@
   --bg-700: #191920;
   --bg-800: #111116;
   --bg-900: #0b0b0d;
+  --backdrop: #0b0b0dcc;
   --background: #09090b;
   --foreground: #fafafa;
   --muted-foreground: #a1a1aa;
@@ -29,19 +47,106 @@
   --color-bg-700: var(--bg-700);
   --color-bg-800: var(--bg-800);
   --color-bg-900: var(--bg-900);
+  --color-backdrop: var(--backdrop);
   --font-clash: "Clash Display", system-ui, sans-serif;
   --font-satoshi: "Satoshi", system-ui, sans-serif;
   --font-sans: var(--font-satoshi);
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-padding-top: 4.5rem;
+  overflow-anchor: none;
+  view-transition-name: root;
+}
+
+@property --mask-size {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 0;
+}
+
+::view-transition-group(root) {
+  animation-duration: 0.7s;
+  animation-timing-function: linear(
+    0 0%,
+    0.2342 12.49%,
+    0.4374 24.99%,
+    0.6093 37.49%,
+    0.6835 43.74%,
+    0.7499 49.99%,
+    0.8086 56.25%,
+    0.8593 62.5%,
+    0.9023 68.75%,
+    0.9375 75%,
+    0.9648 81.25%,
+    0.9844 87.5%,
+    0.9961 93.75%,
+    1 100%
+  );
+}
+
+::view-transition-new(root) {
+  -webkit-mask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><defs><filter id='blur'><feGaussianBlur stdDeviation='2'/></filter></defs><circle cx='20' cy='20' r='18' fill='white' filter='url(%23blur)'/></svg>")
+    no-repeat;
+  mask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><defs><filter id='blur'><feGaussianBlur stdDeviation='2'/></filter></defs><circle cx='20' cy='20' r='18' fill='white' filter='url(%23blur)'/></svg>")
+    no-repeat;
+  -webkit-mask-position: calc(var(--x, 50%) - var(--mask-size, 0px) / 2)
+    calc(var(--y, 50%) - var(--mask-size, 0px) / 2);
+  mask-position: calc(var(--x, 50%) - var(--mask-size, 0px) / 2)
+    calc(var(--y, 50%) - var(--mask-size, 0px) / 2);
+  -webkit-mask-size: var(--mask-size, 0px);
+  mask-size: var(--mask-size, 0px);
+  z-index: 1;
+  animation: reveal-mask 1s forwards;
+}
+
+::view-transition-old(root) {
+  z-index: 0;
+  animation: none;
+}
+
+.dark ::view-transition-old(root) {
+  z-index: 0;
+  animation: none;
+}
+
+@keyframes reveal-mask {
+  from {
+    --mask-size: 0px;
+  }
+  to {
+    --mask-size: 350vmax;
+  }
 }
 
 body {
+  position: relative;
   background: var(--bg-900);
   color: var(--text-secondary);
   font-family: var(--font-satoshi);
+}
+
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  height: 100px;
+  pointer-events: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: linear-gradient(var(--bg-900), transparent, transparent);
+}
+
+body::before {
+  top: 0;
+}
+
+body::after {
+  bottom: 0;
+  transform: scale(-1);
 }
 
 ::selection {
@@ -58,11 +163,37 @@ body {
 }
 
 .marquee-track {
-  animation: marquee 28s linear infinite;
+  animation: marquee 40s linear infinite;
 }
 
 .marquee-track-reverse {
-  animation: marquee-reverse 32s linear infinite;
+  animation: marquee-reverse 45s linear infinite;
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--accordion-panel-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--accordion-panel-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+.animate-accordion-down {
+  animation: accordion-down 0.2s ease-out;
+}
+
+.animate-accordion-up {
+  animation: accordion-up 0.2s ease-out;
 }
 
 @keyframes marquee {
@@ -91,6 +222,117 @@ body {
   );
 }
 
-.noise-overlay {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+.shimmer {
+  --shimmer-color: #fff;
+  background-image: linear-gradient(
+    105deg,
+    var(--highlight) 0%,
+    var(--highlight) 38%,
+    var(--shimmer-color) 50%,
+    var(--highlight) 62%,
+    var(--highlight) 100%
+  );
+  background-size: 280% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: var(--highlight);
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-text 3.5s ease-in-out infinite;
+}
+
+@keyframes shimmer-text {
+  0%,
+  100% {
+    background-position: 100% 0;
+  }
+  50% {
+    background-position: 0% 0;
+  }
+}
+
+.btn {
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  width: fit-content;
+  border: 0;
+  border-radius: 24px;
+  padding: 12px 32px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.25rem;
+  transition: transform 0.4s linear;
+}
+
+.btn:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.btn__text {
+  position: relative;
+  display: block;
+  transform: translateY(0%);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn__text::after {
+  content: attr(data-attr);
+  position: absolute;
+  top: 110%;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  color: var(--text-primary);
+}
+
+.btn__ripple {
+  position: absolute;
+  top: 101%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 100% 100% 0 0;
+  background: var(--text-primary);
+  transition:
+    top 0.5s cubic-bezier(0.4, 0, 0, 1),
+    border-radius 0.5s cubic-bezier(0.4, 0, 0, 1);
+}
+
+.btn:hover {
+  transform: scaleX(1.02);
+  transition: transform 0.6s cubic-bezier(0.34, 5.56, 0.64, 1);
+}
+
+.btn:hover .btn__ripple {
+  top: 0;
+  border-radius: 0;
+}
+
+.btn:hover .btn__text {
+  transform: translateY(-110%);
+}
+
+.btn__outline {
+  background: transparent;
+  color: var(--text-primary);
+  outline: 0.5px solid var(--text-primary);
+}
+
+.btn__outline .btn__text::after {
+  color: var(--text-inverse);
+}
+
+.btn__icon {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  transition: color 0.3s;
+}
+
+.btn:hover .btn__icon {
+  color: var(--text-inverse);
 }

@@ -9,10 +9,10 @@ export function Experience() {
     <section id="experience" className="border-t border-border py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-6">
         <SplitHeading
-          eyebrow="Trajetória"
-          title="Experiência "
-          accent="profissional"
-          subtitle="Onde trabalhei e o impacto que gerei em cada posição."
+          eyebrow="Journey"
+          title="Professional "
+          accent="experience"
+          subtitle="Where I worked and the impact I made in each role."
         />
 
         <div className="space-y-6">

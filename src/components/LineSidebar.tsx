@@ -72,17 +72,22 @@ export default function LineSidebar({
   className = "",
 }: LineSidebarProps) {
   const listRef = useRef<HTMLUListElement>(null);
-  const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
   const targetsRef = useRef<number[]>([]);
   const currentRef = useRef<number[]>([]);
   const rafRef = useRef<number | null>(null);
   const lastRef = useRef(0);
   const activeRef = useRef(defaultActive);
   const smoothingRef = useRef(smoothing);
+  const falloffRef = useRef(falloff);
+  const proximityRadiusRef = useRef(proximityRadius);
+  const boundListRef = useRef<HTMLUListElement | null>(null);
   const [activeIndex, setActiveIndex] = useState(defaultActive);
+  const resolvedActive = controlledActive ?? activeIndex;
 
-  activeRef.current = controlledActive ?? activeIndex;
+  activeRef.current = resolvedActive;
   smoothingRef.current = smoothing;
+  falloffRef.current = falloff;
+  proximityRadiusRef.current = proximityRadius;
 
   useEffect(() => {
     if (controlledActive !== undefined) {
@@ -90,17 +95,23 @@ export default function LineSidebar({
     }
   }, [controlledActive]);
 
-  const runFrame = useCallback((now: number) => {
+  const getItems = useCallback((list = listRef.current ?? boundListRef.current) => {
+    if (!list) return [];
+    return Array.from(list.children).filter(
+      (node): node is HTMLLIElement => node instanceof HTMLLIElement,
+    );
+  }, []);
+
+  const runFrame = useCallback(function runFrame(now: number) {
     const dt = Math.min((now - lastRef.current) / 1000, 0.05);
     lastRef.current = now;
     const tau = Math.max(smoothingRef.current, 1) / 1000;
     const k = 1 - Math.exp(-dt / tau);
 
     let moving = false;
-    const nodes = itemRefs.current;
+    const nodes = getItems();
     for (let i = 0; i < nodes.length; i++) {
       const el = nodes[i];
-      if (!el) continue;
       const target = Math.max(
         targetsRef.current[i] || 0,
         activeRef.current === i ? 1 : 0,
@@ -115,40 +126,57 @@ export default function LineSidebar({
     }
 
     rafRef.current = moving ? requestAnimationFrame(runFrame) : null;
-  }, []);
+  }, [getItems]);
 
   const startLoop = useCallback(() => {
-    if (rafRef.current != null) return;
+    if (rafRef.current != null) {
+      cancelAnimationFrame(rafRef.current);
+    }
     lastRef.current = performance.now();
     rafRef.current = requestAnimationFrame(runFrame);
   }, [runFrame]);
 
-  const handlePointerMove = useCallback(
-    (e: React.PointerEvent<HTMLUListElement>) => {
-      const list = listRef.current;
-      if (!list) return;
-      const rect = list.getBoundingClientRect();
-      const pointerY = e.clientY - rect.top;
-      const ease = FALLOFF_CURVES[falloff] ?? FALLOFF_CURVES.linear;
-      const nodes = itemRefs.current;
+  const startLoopRef = useRef(startLoop);
+  startLoopRef.current = startLoop;
+
+  const bindListRef = useCallback((node: HTMLUListElement | null) => {
+    const prev = boundListRef.current;
+    if (prev) {
+      prev.onpointermove = null;
+      prev.onpointerleave = null;
+    }
+
+    listRef.current = node;
+    boundListRef.current = node;
+    if (!node) return;
+
+    node.onpointermove = (event) => {
+      const rect = node.getBoundingClientRect();
+      const pointerY = event.clientY - rect.top;
+      const ease =
+        FALLOFF_CURVES[falloffRef.current] ?? FALLOFF_CURVES.linear;
+      const nodes = getItems(node);
       for (let i = 0; i < nodes.length; i++) {
         const el = nodes[i];
-        if (!el) continue;
         const center = el.offsetTop + el.offsetHeight / 2;
         const distance = Math.abs(pointerY - center);
-        targetsRef.current[i] = ease(
-          Math.max(0, 1 - distance / proximityRadius),
+        const target = ease(
+          Math.max(0, 1 - distance / proximityRadiusRef.current),
         );
+        targetsRef.current[i] = target;
+        currentRef.current[i] = target;
+        el.style.setProperty("--effect", target.toFixed(4));
       }
-      startLoop();
-    },
-    [falloff, proximityRadius, startLoop],
-  );
+      startLoopRef.current();
+    };
 
-  const handlePointerLeave = useCallback(() => {
-    targetsRef.current = targetsRef.current.map(() => 0);
-    startLoop();
-  }, [startLoop]);
+    node.onpointerleave = () => {
+      targetsRef.current = targetsRef.current.map(() => 0);
+      startLoopRef.current();
+    };
+
+    startLoopRef.current();
+  }, [getItems]);
 
   const handleClick = useCallback(
     (index: number, label: string) => {
@@ -167,6 +195,11 @@ export default function LineSidebar({
   useEffect(
     () => () => {
       if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
+      const list = boundListRef.current;
+      if (list) {
+        list.onpointermove = null;
+        list.onpointerleave = null;
+      }
     },
     [],
   );
@@ -192,20 +225,12 @@ export default function LineSidebar({
       className={`line-sidebar${markerClass}${tickClass}${className ? ` ${className}` : ""}`}
       style={sidebarStyle}
     >
-      <ul
-        ref={listRef}
-        className="line-sidebar__list"
-        onPointerMove={handlePointerMove}
-        onPointerLeave={handlePointerLeave}
-      >
+      <ul ref={bindListRef} className="line-sidebar__list">
         {items.map((label, index) => (
           <li
             key={`${label}-${index}`}
-            ref={(el) => {
-              itemRefs.current[index] = el;
-            }}
             className="line-sidebar__item font-satoshi"
-            aria-current={activeRef.current === index ? "true" : undefined}
+            aria-current={resolvedActive === index ? "true" : undefined}
             onClick={() => handleClick(index, label)}
           >
             {showMarker && (

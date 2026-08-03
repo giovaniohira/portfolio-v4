@@ -41,3 +41,6 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# local HTML dump of reference site (devrajchatribin.com)
+/reference-dump/

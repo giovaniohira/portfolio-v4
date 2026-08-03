@@ -45,6 +45,10 @@
   align-items: baseline;
   font-size: var(--font-size);
   line-height: 1.2;
+  text-shadow:
+    0 0 16px #0b0b0d,
+    0 0 32px #0b0b0d,
+    0 2px 10px rgba(11, 11, 13, 0.85);
   color: color-mix(
     in srgb,
     var(--accent-color) calc(var(--effect, 0) * 100%),

@@ -1,119 +1,108 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { site } from "@/data/site";
+import { useLenis } from "lenis/react";
+import { pageNavLinks, site } from "@/data/site";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
-const headerLinks = [
-  { href: "#home", label: "Home", id: "home" },
-  { href: "#about", label: "Sobre", id: "about" },
-  { href: "#projects", label: "Projetos", id: "projects" },
-  { href: "#contact", label: "Contato", id: "contact" },
-] as const;
+type PageId = (typeof pageNavLinks)[number]["id"];
 
-function MoonIcon() {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-    </svg>
-  );
+function resolveActivePage(pathname: string): PageId {
+  if (pathname.startsWith("/projects")) return "projects";
+  if (pathname.startsWith("/about")) return "about";
+  if (pathname.startsWith("/contact")) return "contact";
+  return "home";
 }
 
 export function Header() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState<(typeof headerLinks)[number]["id"]>("home");
+  const [collapsed, setCollapsed] = useState(false);
+  const active = resolveActivePage(pathname);
+  const isHome = pathname === "/";
+
+  useLenis((lenis) => {
+    if (!isHome) {
+      setCollapsed(lenis.scroll > 80);
+      return;
+    }
+
+    const hero = document.getElementById("home");
+    const threshold = hero
+      ? Math.min(Math.max(hero.offsetHeight * 0.18, 100), 220)
+      : 150;
+    setCollapsed(lenis.scroll > threshold);
+  });
 
   useEffect(() => {
-    const sections = headerLinks
-      .map((link) => document.getElementById(link.id))
-      .filter((el): el is HTMLElement => el !== null);
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-
-        const id = visible[0]?.target.id;
-        if (id && headerLinks.some((link) => link.id === id)) {
-          setActive(id as (typeof headerLinks)[number]["id"]);
-        }
-      },
-      { rootMargin: "-45% 0px -45% 0px", threshold: [0, 0.1, 0.25] },
-    );
-
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
-  }, []);
+    setOpen(false);
+  }, [pathname]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-black">
-      <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between px-8 lg:px-12">
-        <a
-          href="#home"
-          className="font-clash text-base font-semibold tracking-tight text-white"
+    <header className="pointer-events-none sticky top-0 z-50 w-full py-2 sm:py-4">
+      <motion.nav
+        animate={{
+          maxWidth: collapsed ? 600 : 1280,
+          backgroundColor: collapsed ? "var(--backdrop)" : "transparent",
+        }}
+        transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+        className={`pointer-events-auto mx-auto flex w-[calc(100%-2rem)] items-center justify-between gap-4 rounded-full px-4 py-1 transition-[backdrop-filter,outline-color] duration-300 sm:w-full sm:gap-6 sm:px-6 sm:pr-4 ${
+          collapsed
+            ? "backdrop-blur-md outline outline-bg-700"
+            : "backdrop-blur-none outline outline-transparent"
+        }`}
+      >
+        <Link
+          href="/"
+          className="font-clash text-xl font-medium tracking-tight text-primary sm:text-2xl"
         >
           {site.initials}
-        </a>
+        </Link>
 
-        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 md:flex">
-          {headerLinks.map((link) => {
+        <ul className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-6 text-sm text-secondary md:flex">
+          {pageNavLinks.map((link) => {
             const isActive = active === link.id;
 
             return (
-              <a
-                key={link.href}
-                href={link.href}
-                className={`flex items-center gap-2 font-satoshi text-sm transition-colors ${
-                  isActive
-                    ? "font-medium text-white"
-                    : "text-[#9ca3af] hover:text-white/80"
-                }`}
-              >
-                {isActive && (
-                  <span
-                    className="h-1.5 w-1.5 shrink-0 rounded-full bg-highlight"
-                    aria-hidden
-                  />
-                )}
-                {link.label}
-              </a>
+              <li key={link.href} className="group relative">
+                <Link
+                  href={link.href}
+                  className={isActive ? "text-primary" : undefined}
+                  aria-current={isActive ? "page" : undefined}
+                >
+                  <span className="relative inline-flex overflow-hidden">
+                    <span className="translate-y-0 skew-y-0 transform-gpu transition-transform duration-500 group-hover:-translate-y-[110%] group-hover:skew-y-12">
+                      {link.label}
+                    </span>
+                    <span className="absolute translate-y-[110%] skew-y-12 transform-gpu text-primary transition-transform duration-500 group-hover:translate-y-0 group-hover:skew-y-0">
+                      {link.label}
+                    </span>
+                  </span>
+                </Link>
+              </li>
             );
           })}
-        </nav>
+        </ul>
 
         <div className="flex items-center gap-3">
-          <button
-            type="button"
-            aria-label="Alternar tema"
-            className="hidden text-white md:inline-flex"
-          >
-            <MoonIcon />
-          </button>
+          <ThemeToggle className="hidden md:inline-flex" />
 
           <button
             type="button"
             aria-label="Menu"
-            className="flex h-10 w-10 items-center justify-center text-white md:hidden"
+            className="flex h-10 w-10 items-center justify-center text-primary md:hidden"
             onClick={() => setOpen((v) => !v)}
           >
             <div className="flex flex-col gap-1.5">
-              <span className="block h-0.5 w-5 bg-white" />
-              <span className="block h-0.5 w-5 bg-white" />
+              <span className="block h-0.5 w-5 bg-current" />
+              <span className="block h-0.5 w-5 bg-current" />
             </div>
           </button>
         </div>
-      </div>
+      </motion.nav>
 
       <AnimatePresence>
         {open && (
@@ -121,32 +110,26 @@ export function Header() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden border-t border-white/10 bg-black md:hidden"
+            className="pointer-events-auto mx-auto mt-2 w-[calc(100%-2rem)] overflow-hidden rounded-2xl border border-bg-700 bg-bg-900/95 backdrop-blur-md md:hidden"
           >
-            <div className="flex flex-col gap-1 px-8 py-4">
-              {headerLinks.map((link) => {
+            <ul className="flex flex-col gap-1 px-4 py-3">
+              {pageNavLinks.map((link) => {
                 const isActive = active === link.id;
 
                 return (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    className={`flex items-center gap-2 rounded-lg px-3 py-2 font-satoshi text-sm ${
-                      isActive ? "text-white" : "text-[#9ca3af]"
-                    }`}
-                  >
-                    {isActive && (
-                      <span
-                        className="h-1.5 w-1.5 shrink-0 rounded-full bg-highlight"
-                        aria-hidden
-                      />
-                    )}
-                    {link.label}
-                  </a>
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className={`block rounded-lg px-3 py-2 font-satoshi text-sm ${
+                        isActive ? "text-primary" : "text-secondary"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
                 );
               })}
-            </div>
+            </ul>
           </motion.nav>
         )}
       </AnimatePresence>

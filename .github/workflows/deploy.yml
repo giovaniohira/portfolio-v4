@@ -1,0 +1,77 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Deploy para VPS
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          KEY="$HOME/.ssh/deploy_key"
+          HOST="root@72.60.243.98"
+          WEB="/var/www/giovaniohira.com"
+          RELEASE="$WEB/v4/releases/$(date +%s)"
+
+          install -m 700 -d "$HOME/.ssh"
+          printf '%s\n' "$SSH_PRIVATE_KEY" > "$KEY"
+          chmod 600 "$KEY"
+          ssh-keyscan -H 72.60.243.98 >> "$HOME/.ssh/known_hosts" 2>/dev/null
+
+          ssh -i "$KEY" "$HOST" "mkdir -p $RELEASE $WEB/v4/releases"
+          rsync -avz --delete -e "ssh -i $KEY" out/ "$HOST:$RELEASE/"
+          ssh -i "$KEY" "$HOST" bash -s <<'REMOTE'
+          set -euo pipefail
+          WEB="/var/www/giovaniohira.com"
+          RELEASE=$(ls -1dt "$WEB/v4/releases"/* | head -1)
+
+          ln -sfn "$RELEASE" "$WEB/v4/current"
+          chown -R www-data:www-data "$WEB/v4"
+
+          install -m 755 /dev/stdin /usr/local/bin/portfolio-switch <<'SCRIPT'
+          #!/usr/bin/env bash
+          set -euo pipefail
+          WEB="/var/www/giovaniohira.com"
+          V3="$WEB/current"
+          V4="$WEB/v4/current"
+          ACTIVE="$WEB/active"
+          mode="${1:-}"
+          [[ -n "$mode" ]] || { echo "Usage: portfolio-switch v3|v4|status"; exit 1; }
+          case "$mode" in
+            v3) ln -sfn "$V3" "$ACTIVE"; echo "active -> v3" ;;
+            v4) ln -sfn "$V4" "$ACTIVE"; echo "active -> v4" ;;
+            status) readlink -f "$ACTIVE" 2>/dev/null || readlink "$ACTIVE"; exit 0 ;;
+            *) echo "Usage: portfolio-switch v3|v4|status"; exit 1 ;;
+          esac
+          nginx -t && systemctl reload nginx
+          SCRIPT
+
+          NGINX="/etc/nginx/sites-enabled/giovaniohira.com"
+          if ! grep -q 'giovaniohira.com/active' "$NGINX"; then
+            sed -i 's|root /var/www/giovaniohira.com/current;|root /var/www/giovaniohira.com/active;|' "$NGINX"
+            sed -i 's|try_files \$uri \$uri/ /index.html;|try_files $uri $uri.html $uri/ /index.html;|' "$NGINX"
+          fi
+
+          ln -sfn "$WEB/v4/current" "$WEB/active"
+          chown -h www-data:www-data "$WEB/active" || true
+          nginx -t && systemctl reload nginx
+          echo "Deployed v4 release: $RELEASE"
+          REMOTE
