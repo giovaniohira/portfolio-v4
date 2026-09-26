@@ -101,7 +101,7 @@ export const contactFaqs = [
   {
     question: "What is your current role?",
     answer:
-      "I'm a mid-level full stack engineer at Nexus Labz, working on web and mobile products end-to-end — from architecture and backend to deploy and UI.",
+      "I'm a mid-level full stack engineer at Just Travel, on the new business team, building MVPs end-to-end — from backend and API to interface and delivery.",
   },
   {
     question: "What kind of projects do you take on?",
@@ -237,10 +237,26 @@ export type Experience = {
 
 export const experiences: Experience[] = [
   {
+    id: "justtravel",
+    company: "Just Travel",
+    role: "Mid-Level Software Engineer",
+    period: "Aug 2026 — Present",
+    location: "Brazil · Remote",
+    logo: "/companies/justtravel.png",
+    summary:
+      "Mid-level engineer on the new business team, building a large-scale tourism payments MVP for municipal public bidding.",
+    highlights: [
+      "Shipped a large MVP in 3 weeks with a 3-developer team to compete in a municipal public bid.",
+      "Built multi-role views for tourists, service providers, operators, and city governments.",
+      "Own user stories end-to-end, from backend and API to interface and delivery.",
+    ],
+    url: "https://justtraveltour.com",
+  },
+  {
     id: "nexus",
     company: "Nexus Labz",
     role: "Mid-Level Software Engineer",
-    period: "Feb 2026 — Present",
+    period: "Feb 2026 — Aug 2026",
     location: "Brazil · Remote",
     logo: "/companies/nexus.png",
     summary:
