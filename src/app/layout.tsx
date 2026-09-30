@@ -2,16 +2,16 @@ import type { Metadata } from "next";
 import { SiteBackground } from "@/components/SiteBackground";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { site } from "@/data/site";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Giovani Ohira — Software Engineer | UI/UX",
+  title: "Giovani Ohira — Software Engineer",
   description:
-    "Giovani Ohira's portfolio. Full stack development, UI/UX, automated testing, and digital products focused on quality and experience.",
+    "Portfolio of Giovani Ohira, a full stack engineer based in Curitiba, Brazil, specializing in backend development, system architecture, and automated testing.",
   openGraph: {
-    title: "Giovani Ohira — Software Engineer | UI/UX",
-    description:
-      "Building digital experiences with purpose, performance, and accessibility.",
+    title: "Giovani Ohira — Software Engineer",
+    description: site.tagline,
     type: "website",
   },
   themeColor: "#000000",

@@ -47,12 +47,12 @@ export function ContactProfileCard() {
   return (
     <div className="h-full w-full rounded-3xl bg-bg-800 p-6 shadow-sm">
       {site.available && (
-        <div className="mb-4 flex w-fit items-center gap-2 rounded-full bg-highlight/10 px-4 py-2">
+        <div className="mb-4 flex w-fit items-center gap-2 rounded-full bg-yellow-400/10 px-4 py-2">
           <span className="relative flex h-1.5 w-1.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-highlight opacity-75" />
-            <span className="relative inline-flex h-full w-full rounded-full bg-highlight" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-yellow-400 opacity-75" />
+            <span className="relative inline-flex h-full w-full rounded-full bg-yellow-400" />
           </span>
-          <p className="font-satoshi text-xs text-primary">Available for work</p>
+          <p className="font-satoshi text-xs text-yellow-400">Available for new opportunities</p>
         </div>
       )}
 
@@ -61,8 +61,8 @@ export function ContactProfileCard() {
       </div>
 
       <p className="mt-4 mb-6 font-satoshi leading-relaxed text-secondary">
-        My inbox is always open. Whether you have a project or just want to say hi, I would love to
-        hear from you. Feel free to contact me and I&apos;ll get back to you.
+        You can reach me through the form or by email. I am happy to discuss job opportunities,
+        projects, or collaborations, and I will respond as soon as possible.
       </p>
 
       <div className="flex items-center gap-6 text-secondary">

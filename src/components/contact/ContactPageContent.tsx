@@ -30,14 +30,14 @@ export function ContactPageContent() {
   return (
     <div className="mx-auto max-w-7xl px-6 pb-24 pt-16 md:px-8 md:pb-32 md:pt-24">
       <section>
-        <SectionEyebrow>Connect with me</SectionEyebrow>
+        <SectionEyebrow>Contact</SectionEyebrow>
 
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-10 font-clash text-4xl font-medium leading-tight tracking-tight text-primary md:w-2/3 md:text-5xl lg:w-1/2 lg:text-6xl"
         >
-          Let&apos;s start a project together
+          Get in touch
         </motion.h1>
 
         <div className="flex w-full flex-col gap-10 sm:flex-row sm:gap-8">
@@ -70,7 +70,7 @@ export function ContactPageContent() {
             viewport={{ once: true }}
             className="font-clash text-4xl font-medium tracking-tight text-primary md:text-5xl"
           >
-            Have Questions?
+            Frequently asked questions
           </motion.h2>
         </div>
 

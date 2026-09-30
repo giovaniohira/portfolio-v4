@@ -28,9 +28,9 @@ export function ProjectsPageContent() {
       <div className="mx-auto max-w-7xl px-6 pb-16 pt-16 md:px-8 md:pb-24 md:pt-24">
         <SplitHeading
           eyebrow="My work"
-          title="Creating next level "
-          accent="digital products"
-          subtitle="A complete archive of projects — from backend APIs to full-stack products."
+          title="Project "
+          accent="archive"
+          subtitle="A complete list of my work, from npm packages to full stack applications."
         />
 
         <div className="mb-10 flex flex-wrap gap-3">

@@ -43,7 +43,7 @@ export function Projects() {
         transition={{ delay: 0.1 }}
         className="mt-4 max-w-xl text-pretty font-satoshi text-secondary"
       >
-        A curated selection of projects that best showcase my expertise and the results achieved.
+        A selection of recent projects.
       </motion.p>
 
       <div className="grid grid-cols-1 gap-y-10 py-10 sm:grid-cols-2 sm:gap-x-16 sm:gap-y-0">

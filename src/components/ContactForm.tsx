@@ -61,9 +61,9 @@ export function ContactForm() {
   if (status === "success" && !showForm) {
     return (
       <div className="flex min-h-80 flex-col items-center justify-center rounded-3xl border border-border bg-bg-800/50 px-6 py-12 text-center">
-        <p className="font-clash text-2xl text-primary">Message sent!</p>
+        <p className="font-clash text-2xl text-primary">Message sent</p>
         <p className="mt-3 max-w-sm font-satoshi text-sm leading-relaxed text-secondary">
-          Thanks for reaching out. I&apos;ll get back to you soon — feel free to keep exploring the site.
+          Thank you for reaching out. I will get back to you shortly.
         </p>
       </div>
     );
@@ -72,9 +72,9 @@ export function ContactForm() {
   if (status === "error" && !showForm) {
     return (
       <div className="flex min-h-80 flex-col items-center justify-center rounded-3xl border border-border bg-bg-800/50 px-6 py-12 text-center">
-        <p className="font-clash text-2xl text-primary">Something went wrong</p>
+        <p className="font-clash text-2xl text-primary">Message not sent</p>
         <p className="mt-3 font-satoshi text-sm text-secondary">
-          Please email me directly at{" "}
+          An error occurred. Please contact me directly at{" "}
           <a href={`mailto:${site.email}`} className="text-highlight underline">
             {site.email}
           </a>
@@ -87,7 +87,7 @@ export function ContactForm() {
     <form onSubmit={handleSubmit} className="w-full space-y-4">
       <div className="space-y-2">
         <label htmlFor="name" className="block pb-1 font-satoshi text-sm font-medium text-primary">
-          Full Name
+          Full name
         </label>
         <input
           id="name"
@@ -134,7 +134,7 @@ export function ContactForm() {
       </div>
 
       <OutlineButton type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Sending..." : "Submit"}
+        {isSubmitting ? "Sending..." : "Send message"}
       </OutlineButton>
     </form>
   );

@@ -6,7 +6,7 @@ import { site } from "@/data/site";
 
 export const metadata: Metadata = {
   title: `Projects — ${site.name}`,
-  description: "Selected projects and full archive — full stack development, UI/UX, and quality engineering.",
+  description: `Projects by ${site.name}, from npm packages to full stack applications.`,
 };
 
 export default function ProjectsPage() {

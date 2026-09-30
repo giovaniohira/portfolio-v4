@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 function aboutDescription() {
-  return `Meet ${site.name}: full stack engineer, UI/UX, and professional journey.`;
+  return `About ${site.name}: background, skills, and professional experience.`;
 }
 
 export default function AboutPage() {

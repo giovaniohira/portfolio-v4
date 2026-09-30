@@ -54,9 +54,30 @@
 }
 
 html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--bg-600) var(--bg-900);
   scroll-padding-top: 4.5rem;
   overflow-anchor: none;
   view-transition-name: root;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-900);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-600);
+  border-radius: 999px;
+  border: 2px solid var(--bg-900);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--highlight);
 }
 
 @property --mask-size {

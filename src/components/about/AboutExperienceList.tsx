@@ -76,7 +76,7 @@ export function AboutExperienceList() {
         <SectionEyebrow>Journey</SectionEyebrow>
         <h2 className="mb-4 font-clash text-4xl font-medium text-primary md:text-5xl">Experience</h2>
         <p className="text-balance font-satoshi text-secondary">
-          I&apos;ve worked with innovative teams and companies to build high-quality digital products.
+          Professional experience and key contributions in each role.
         </p>
       </div>
 

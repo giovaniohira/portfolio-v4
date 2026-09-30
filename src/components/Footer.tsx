@@ -54,21 +54,21 @@ export function Footer() {
           {site.available && (
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-border bg-bg-900/60 px-4 py-2">
               <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-highlight opacity-75" />
-                <span className="relative inline-flex h-full w-full rounded-full bg-highlight" />
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-yellow-400 opacity-75" />
+                <span className="relative inline-flex h-full w-full rounded-full bg-yellow-400" />
               </span>
-              <span className="font-satoshi text-sm text-highlight">Available for work</span>
+              <span className="font-satoshi text-sm text-yellow-400">Available for new opportunities</span>
             </div>
           )}
 
           <h2 className="font-clash text-3xl font-semibold tracking-tight text-primary md:text-4xl lg:text-5xl">
-            Let&apos;s create your
+            Have a project
             <br />
-            next big idea.
+            in mind?
           </h2>
 
           <OutlineButton href="/contact" className="mt-6 mx-auto block">
-            Contact Me
+            Contact me
           </OutlineButton>
         </div>
 
