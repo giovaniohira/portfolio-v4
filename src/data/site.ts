@@ -121,6 +121,42 @@ export function getProjectById(id: string) {
 
 export const projects: Project[] = [
   {
+    id: "radar-licitacoes",
+    title: "Radar de Licitações",
+    description:
+      "Daily public-tender alerts for small businesses in Brazil. Ingests the national procurement portal (PNCP) every day, matches tenders against each company's alerts, and summarizes the tender PDF with AI.",
+    image: "/projects/radar-cover.png",
+    tags: ["Next.js", "PostgreSQL", "Claude API", "Docker"],
+    year: "2026",
+    categories: ["fullstack"],
+    links: { github: "https://github.com/giovaniohira/radar-licitacoes" },
+    featured: true,
+    role: "Solo builder: product, backend, frontend, and infrastructure",
+    longDescription:
+      "Small businesses miss public tenders because nobody has time to check the portal every day, and the existing tools are expensive. Radar ingests the PNCP public API (about 5,000 tenders a day), indexes them with Portuguese full-text search, and sends each company one daily digest with only the new tenders that match its keywords, sector, region, and budget range. For any tender, Claude reads the PDF and extracts deadlines, qualification documents, small-business exclusivity, and red flags.",
+    features: [
+      "Daily ingestion of every competitive procurement type, with pagination, exponential backoff, Retry-After handling, and idempotent upserts.",
+      "Accent-insensitive Portuguese full-text search with weighted ranking (Postgres unaccent + tsvector + GIN).",
+      "Alerts with sector presets mapped to CNAE codes, region, procurement type, and value range; each tender is sent once per alert.",
+      "AI tender summary with structured output validated by Zod, cached per tender, with a daily quota per user.",
+      "Passwordless magic-link login with single-use hashed tokens and HMAC-signed sessions.",
+      "33 unit and integration tests against a real Postgres, CI on GitHub Actions, and a Docker Compose stack that runs in about 170 MB of RAM.",
+    ],
+    technologies: [
+      { name: "Next.js 16", description: "App Router, Server Actions, and Partial Prerendering.", url: "https://nextjs.org/" },
+      { name: "PostgreSQL", description: "Full-text search, idempotent upserts via jsonb_to_recordset.", url: "https://www.postgresql.org/" },
+      { name: "Claude API", description: "PDF reading with structured outputs.", url: "https://docs.anthropic.com/" },
+      { name: "PNCP API", description: "Brazil's national public procurement portal.", url: "https://pncp.gov.br/api/consulta/swagger-ui/index.html" },
+      { name: "Docker Compose", description: "Web, jobs scheduler, and database containers.", url: "https://docs.docker.com/compose/" },
+      { name: "Vitest", description: "Unit and Postgres integration tests.", url: "https://vitest.dev/" },
+    ],
+    buildSteps: [
+      { title: "Clone the repository", code: "git clone https://github.com/giovaniohira/radar-licitacoes && cd radar-licitacoes" },
+      { title: "Start Postgres and migrate", code: "docker run -d -p 5544:5432 -e POSTGRES_USER=radar -e POSTGRES_PASSWORD=radar -e POSTGRES_DB=radar postgres:17-alpine\ncp .env.example .env.local && npm install && npm run db:migrate" },
+      { title: "Ingest one day and run", code: "npm run ingest -- 2026-10-15\nnpm run dev" },
+    ],
+  },
+  {
     id: "vault",
     title: "Vault",
     description:
@@ -213,6 +249,17 @@ export const projects: Project[] = [
     year: "2026",
     categories: ["fullstack"],
     links: { github: "https://github.com/giovaniohira/algo-client" },
+  },
+  {
+    id: "dsa-coach",
+    title: "DSA Coach",
+    description:
+      "Desktop interview trainer: pick a LeetCode problem, start the timer, solve it in Monaco, and submit straight to the LeetCode judge. Every attempt is recorded in SQLite to track progress.",
+    image: "/projects/dsa-coach-cover.png",
+    tags: ["Electron", "React", "TypeScript", "SQLite"],
+    year: "2026",
+    categories: ["fullstack"],
+    links: { github: "https://github.com/giovaniohira/dsa-coach" },
   },
 ];
 
