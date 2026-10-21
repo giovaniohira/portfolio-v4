@@ -124,8 +124,8 @@ export const projects: Project[] = [
     id: "radar-licitacoes",
     title: "Radar de Licitações",
     description:
-      "Find, track, and win Brazilian public tenders. Daily alerts from the national procurement portal (PNCP), an AI summary of each tender PDF, a proposal pipeline, and market analytics built from every signed government contract.",
-    image: "/projects/radar-cover-v2.png",
+      "Find, track, and win Brazilian public tenders. A daily inbox of new tenders from the national procurement portal (PNCP) with one-click triage, an AI summary of each tender PDF, a proposal pipeline, and market analytics built from every signed government contract.",
+    image: "/projects/radar-cover-v3.png",
     tags: ["Next.js", "PostgreSQL", "Claude API", "Docker"],
     year: "2026",
     categories: ["fullstack"],
@@ -133,16 +133,17 @@ export const projects: Project[] = [
     featured: true,
     role: "Solo builder: product, backend, frontend, and infrastructure",
     longDescription:
-      "Small businesses miss public tenders because nobody has time to check the portal every day, and the existing tools are expensive and generic. Radar ingests the PNCP public API three times a day (about 5,000 tenders and 9,000 signed contracts a day), indexes everything with Portuguese full-text search, and sends each company one daily e-mail with only the new tenders that match its alerts. Claude reads the tender PDF and extracts deadlines, qualification documents, small-business exclusivity, and red flags; that list becomes the checklist of the card in a drag-and-drop proposal pipeline. Signed contracts power a market view: who buys what, who wins, and at what price. The live site has a one-click demo account that resets every day.",
+      "Small businesses miss public tenders because nobody has time to check the portal every day, and the existing tools are expensive and generic. Radar ingests the PNCP public API three times a day (about 5,000 tenders and 9,000 signed contracts a day), indexes everything with Portuguese full-text search, and sends each company one daily e-mail with only the new tenders that match its alerts. Claude reads the tender PDF and extracts deadlines, qualification documents, small-business exclusivity, and red flags; that list becomes the checklist of the card in a drag-and-drop proposal pipeline. Signed contracts power a market view: who buys what, who wins, and at what price. The interface was redesigned from a heuristic review: a \"Today\" inbox replaces the KPI dashboard, PNCP boilerplate is stripped into short titles, only deadlines within three days get color, and tenders are triaged inline with undo instead of confirmation dialogs. The live site has a one-click demo account that resets every day.",
     features: [
+      "\"Today\" inbox: new tenders per alert in tabs, short titles with the matched keyword highlighted, and inline Track / Discard with undo.",
       "Daily ingestion of tenders and signed contracts, with pagination, exponential backoff, Retry-After handling, idempotent upserts, and resumable backfills.",
       "Accent-insensitive Portuguese full-text search with weighted ranking (Postgres unaccent + tsvector + GIN) and any search saved as an alert in one click.",
       "Kanban proposal pipeline with native drag-and-drop, a qualification checklist seeded from the AI summary, notes, and an iCalendar feed of deadlines.",
       "Market analytics over government contracts: top buyers and suppliers, weekly spend, contract size bands, and buyer and supplier profiles.",
       "AI tender summary with structured output validated by Zod, cached per tender, with a daily quota per user.",
       "Privacy by default: contracts with individuals are stored without CPF or name, even in the raw payload.",
-      "Dependency-free UI: a plain-CSS design system with light and dark themes and hand-drawn SVG charts.",
-      "51 unit and integration tests against a real Postgres, CI/CD on GitHub Actions to a Docker Compose stack on a VPS.",
+      "Dependency-free UI: a plain-CSS token system (ink and paper neutrals, one accent, orange only for urgent deadlines) with light and dark themes and hand-drawn SVG charts.",
+      "54 unit and integration tests against a real Postgres; every merge to main deploys to a Docker Compose stack on a VPS, with public smoke tests and one-click rollback to any published image.",
     ],
     technologies: [
       { name: "Next.js 16", description: "App Router, Server Actions, Cache Components, and Partial Prerendering.", url: "https://nextjs.org/" },
